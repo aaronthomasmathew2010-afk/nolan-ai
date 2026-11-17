@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mitra AI</title>
+
+  <style>
+    body {
+      background: #101426;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 35px 15px;
+    }
+
+    h1 {
+      color: #8b9cff;
+      margin-top: 40px;
+    }
+
+    .mic {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: none;
+      background: #625bff;
+      color: white;
+      font-size: 42px;
+      margin: 35px;
+      cursor: pointer;
+    }
+
+    .panel {
+      background: #202943;
+      padding: 20px;
+      border-radius: 15px;
+      margin: 15px auto;
+      max-width: 400px;
+      min-height: 55px;
+    }
+
+    button {
+      padding: 12px 22px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🤖 Mitra AI</h1>
+  <p>Your personal voice assistant</p>
+
+  <button class="mic" onclick="listen()">🎤</button>
+
+  <div class="panel">
+    <h3>You said:</h3>
+    <p id="heard">Press the microphone to speak.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Mitra says:</h3>
+    <p id="reply">Hello! I'm Mitra AI.</p>
+  </div>
+
+  <button onclick="speak()">🔊 Speak</button>
+
+  <script>
+    function listen() {
+      const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        alert("Speech recognition is not supported in this browser.");
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = "en-IN";
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const message = event.results[0][0].transcript;
+
+        document.getElementById("heard").textContent = message;
+
+        document.getElementById("reply").textContent =
+          "I heard you say: " + message;
+      };
+
+      recognition.onerror = function() {
+        document.getElementById("reply").textContent =
+          "Sorry, I couldn't hear you. Try again.";
+      };
+    }
+
+    function speak() {
+      const message =
+        document.getElementById("reply").textContent;
+
+      const voice = new SpeechSynthesisUtterance(message);
+      voice.lang = "en-IN";
+
+      speechSynthesis.speak(voice);
+    }
+  </script>
+
+</body>
+</html>
